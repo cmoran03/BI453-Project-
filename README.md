@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-This project applies Non-Negative MAtrix Factorisation to miRNA samples of leukemia patients to cluster the different leukemia subtypes.
+This project applies Non-Negative Matrix Factorisation to miRNA samples of leukemia patients to cluster the different leukemia subtypes.
 
 
 ## Load Packages
@@ -73,7 +73,7 @@ covariates2 <- data.frame(Disease = disease2)
 rownames(covariates2) <- colnames(A)
 ```
 
-##NMF 
+## NMF 
 
 ```{r}
 res_k3 <- nmf(A, rank = 3, method = "lee", seed = "random", nrun = 50)
@@ -111,7 +111,7 @@ sil_k4 <- mean(silhouette(as.integer(clusters_k4), dist(t(A)))[, 3])
 
 ```
 
-##Rank Selection
+## Rank Selection
 
 ```{r}
 
@@ -140,7 +140,7 @@ dev.off()
 
 ```
 
-##NMF by subtype
+## NMF by subtype
 
 ```{r}
 
@@ -303,7 +303,7 @@ dev.off()
 
 ```
 
-##Identitfy Differential miRNAs in AML clusters
+## Identitfy Differential miRNAs in AML clusters
 
 ```{r}
 diff_w <- abs(w_AML_k2_norm[, 1] - w_AML_k2_norm[, 2])
