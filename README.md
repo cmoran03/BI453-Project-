@@ -28,32 +28,32 @@ library(GEOquery)
 ## Pre-Processing
 
 ```{r}
-#Remove rows and columns not needed for analysis
+# Remove rows and columns not needed for analysis
 gset <- getGEO("GSE51908", GSEMatrix = TRUE)
 GSE51908_series_matrix <- exprs(gset[[1]])
 Leuk_data <- GSE51908_series_matrix[-c(1:27, 29:63, 911), ]
 Leuk_data <- Leuk_data[ ,-c(2:25, 44:79, 109:161, 175:191)]
 
-#Convert to data frame
+# Convert to data frame
 Leuk_data <- as.data.frame(Leuk_data)
           
-#Convert row names to miRNA names                  
+# Convert row names to miRNA names                  
 rownames(Leuk_data) <- Leuk_data[, 1]
 Leuk_data <- Leuk_data[, -1]
 
-#Convert column names to sample names
+# Convert column names to sample names
 colnames(Leuk_data) <- Leuk_data[ 1,]
 Leuk_data <- Leuk_data[ -1,]
 
-#Convert data frame to matrix
+# Convert data frame to matrix
 A <- as.matrix(sapply(Leuk_data, as.numeric))
 rownames(A) <- rownames(Leuk_data)
 
-#Make matrix non-negative
+# Make matrix non-negative
 A <- nneg(A, method = "absolute", threshold = 0, shift = TRUE)
 ```
 
-##Create Ground Truths
+## Create Ground Truths
 
 ```{r}
 head(colnames(A))
