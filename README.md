@@ -76,7 +76,7 @@ rownames(covariates2) <- colnames(A)
 ## NMF 
 
 ```{r}
-res_k3 <- nmf(A, rank = 3, method = "lee", seed = "random", nrun = 50)
+res_k3 <- nmf(A, rank = 3, method = "brinet", seed = "random", nrun = 50)
 w_k3 <- basis(res_k3)
 dim(w_k3)
 h_k3 <- coef(res_k3)
@@ -93,7 +93,7 @@ ari_k3 <- adjustedRandIndex(clusters_k3, True_labels3)
 
 sil_k3 <- mean(silhouette(as.integer(clusters_k3), dist(t(A)))[, 3])
 
-res_k2 <- nmf(A, rank = 2, method = "lee", seed = "random", nrun = 50)
+res_k2 <- nmf(A, rank = 2, method = "brunet", seed = "random", nrun = 50)
 w_k2 <- basis(res_k2)
 h_k2 <- coef(res_k2)
 consensusmap(res_k2)
@@ -105,7 +105,7 @@ ari_k2 <- adjustedRandIndex(clusters_k2, True_labels2)
 
 sil_k2 <- mean(silhouette(as.integer(clusters_k2), dist(t(A)))[, 3])
 
-res_k4 <- nmf(A, rank = 4, method = "lee", seed = "random", nrun = 50)
+res_k4 <- nmf(A, rank = 4, method = "bruent", seed = "random", nrun = 50)
 clusters_k4 <- predict(res_k4)
 sil_k4 <- mean(silhouette(as.integer(clusters_k4), dist(t(A)))[, 3])
 
@@ -115,7 +115,7 @@ sil_k4 <- mean(silhouette(as.integer(clusters_k4), dist(t(A)))[, 3])
 
 ```{r}
 
-kcompar <- nmf(A, rank = 2:4, method = "lee", seed = "random", nrun = 10)
+kcompar <- nmf(A, rank = 2:4, method = "brunet", seed = "random", nrun = 10)
 
 pdf("RankComparison_lee.pdf", width = 14, height = 12)
 consensusmap(kcompar, annCol = covariates)
@@ -148,7 +148,7 @@ AML_data <- as.matrix(A[ ,(1:18)])
 
 ALL_data <- as.matrix(A[ ,(19:60)])
 
-resAML_k2 <- nmf(AML_data, rank = 2, method = "lee", seed = "random", nrun = 50)
+resAML_k2 <- nmf(AML_data, rank = 2, method = "brunet", seed = "random", nrun = 50)
 w_AML_k2 <- basis(resAML_k2)
 row.names(w_AML_k2) <- row.names(A)
 h_AML_k2 <- coef(resAML_k2)
@@ -159,7 +159,7 @@ dev.off()
 clustersAML_k2 <- predict(resAML_k2)
 sil_AML_k2 <- mean(silhouette(as.integer(clustersAML_k2), dist(t(AML_data)))[, 3])
 
-resAML_k3 <- nmf(AML_data, rank = 3, method = "lee", seed = "random", nrun = 50)
+resAML_k3 <- nmf(AML_data, rank = 3, method = "brunet", seed = "random", nrun = 50)
 w_AML_k3 <- basis(resAML_k3)
 h_AML_k3 <- coef(resAML_k3)
 pdf("AML_k3_lee.pdf")
@@ -173,7 +173,7 @@ covariates_ALL <- data.frame(covariates[-c(1:18), ])
 rownames(covariates_ALL) <- colnames(A[, -c(1:18)])
 colnames(covariates_ALL) <- ("Disease")
 
-resALL_k2 <- nmf(ALL_data, rank = 2, method = "lee", seed = "random", nrun = 50)
+resALL_k2 <- nmf(ALL_data, rank = 2, method = "brunet", seed = "random", nrun = 50)
 w_ALL_k2 <- basis(resALL_k2)
 h_ALL_k2 <- coef(resALL_k2)
 pdf("ALL_k2_lee.pdf")
@@ -191,7 +191,7 @@ ari_ALL_k2 <- adjustedRandIndex(clustersALL_k2, True_labels_ALL)
 
 sil_ALL_k2 <- mean(silhouette(as.integer(clustersALL_k2), dist(t(ALL_data)))[, 3])
 
-resALL_k3 <- nmf(ALL_data, rank = 3, method = "lee", seed = "random", nrun = 50)
+resALL_k3 <- nmf(ALL_data, rank = 3, method = "brunet", seed = "random", nrun = 50)
 w_ALL_k3 <- basis(resALL_k3)
 h_ALL_k3 <- coef(resALL_k3)
 pdf("ALL_k3_lee.pdf")
