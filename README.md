@@ -29,7 +29,7 @@ library(GEOquery)
 ## Pre-Processing
 
 ```{r}
-#Remove rows and columns not needed for analysis
+# Remove rows and columns not needed for analysis
 gset <- getGEO("GSE51908", GSEMatrix = TRUE)
 
 
@@ -40,22 +40,22 @@ head(pheno$title)
 
 A <- GSE51908_series_matrix[ ,-c(1:24, 43:78, 108:160, 174:190)]
 
-#Make matrix non-negative
+# Make matrix non-negative
 A <- nneg(A, method = "absolute", threshold = 0, shift = TRUE)
 ```
 
-##Create Ground Truths
+## Create Ground Truths
 
 ```{r}
 head(colnames(A))
 
-#Ground Truths when k=3
+# Ground Truths when k=3
 disease3 <- c("AML", "AML", "AML", "AML", "AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","AML",
 "AML","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","B-cell ALL","T-cell ALL", "T-cell ALL", "T-cell ALL", "T-cell ALL", "T-cell ALL", "T-cell ALL", "T-cell ALL", "T-cell ALL", "T-cell ALL", "T-cell ALL", "T-cell ALL", "T-cell ALL", "T-cell ALL")
 covariates <- data.frame(Disease = disease3)
 rownames(covariates) <- colnames(A)
 
-#Ground Truths when k=2
+# Ground Truths when k=2
 disease2 <- c("AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","AML","ALL","ALL","ALL","ALL","ALL","ALL",
 "ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL",
 "ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL","ALL",
@@ -64,7 +64,7 @@ covariates2 <- data.frame(Disease = disease2)
 rownames(covariates2) <- colnames(A)
 ```
 
-##Rank Selection
+## Rank Selection
 
 ```{r}
 kcompar <- nmf(A, rank = 2:4, method = "brunet", seed = "random", nrun = 50)
@@ -135,9 +135,10 @@ qqline(as.vector(residuals), col = "red", lwd = 2)
 
 ```
 
-##NMF by subtype
+## NMF by subtype
 
 ```{r}
+# NMF for ALL data
 
 ALL_data <- as.matrix(A[ ,(19:60)])
 
@@ -157,6 +158,7 @@ True_labels_ALL <- covariates_ALL$Disease
 
 ari_ALL_k2_kl <- adjustedRandIndex(clustersALL_k2, True_labels_ALL)
 
+# NMF for AML data
 
 AML_data <- as.matrix(A[ ,(1:18)])
 
@@ -237,7 +239,7 @@ dev.off()
 
 ```
 
-##Identitfy Differential miRNAs in AML clusters
+## Identitfy Differential miRNAs in AML clusters
 
 ```{r}
 top20_wk2 <- sort(diff_w, decreasing = TRUE)[1:20]
