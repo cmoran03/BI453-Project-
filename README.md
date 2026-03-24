@@ -145,8 +145,7 @@ resALL_k2 <- nmf(ALL_data, rank = 2, method = "brunet", seed = "random", nrun = 
 # Create cluster assignments based on NMF
 clustersALL_k2<- predict(resALL_k2)
 
-# Calculate ARI by comparing NMF clusters to Ground Truths to evaluate
-# clustering accuracy
+# Calculate ARI by comparing NMF clusters to Ground Truths to evaluate clustering accuracy
 ari_ALL_k2_kl <- adjustedRandIndex(clustersALL_k2, covariates_ALL$Disease)
 
 # NMF for AML data
@@ -195,24 +194,19 @@ h_AML_k2 <- coef(resAML_k2)
 # Identify maximum value in each column of the W matrix 
 scales_AML_k2 <- apply(w_AML_k2, 2, max)
 
-# Divide each entry of each column in W by the maximum value in the column to
-# max normalise W
+# Divide each entry of each column in W by the maximum value in the column to max normalise W
 w_AML_k2_norm <- sweep(w_AML_k2, 2, scales_AML_k2, "/")
 
-# Multiply each entry of each row in H by the maimum value in the correspond
-# column in W to max normalise H
+# Multiply each entry of each row in H by the maimum value in the correspond column in W to max normalise H
 h_AML_k2_norm <- sweep(h_AML_k2, 1, scales_AML_k2, "*")
 
-# Assign each sample to the cluster corresponding to the row with the highest value 
-# in each column of the max-normalised H matrix 
+# Assign each sample to the cluster corresponding to the row with the highest value  in each column of the max-normalised H matrix 
 clusters_AML_k2_norm <- apply(h_AML_k2_norm, 2, which.max)
 
-# Calculate absolute difference between cluster weights
-# to identify miRNAs contributing most strongly to cluster separation
+# Calculate absolute difference between cluster weights to identify miRNAs contributing most strongly to cluster separation
 diff_w <- abs(w_AML_k2_norm[, 1] - w_AML_k2_norm[, 2])
 
-# Select miRNAs with largest weight difference with a threshold that reduces
-# dimensionality
+# Select miRNAs with largest weight difference with a threshold that reduces dimensionality
 top_miRNA <- AML_data[diff_w > 0.3, ]
 
 # Run NMF for the cleaned AML data
@@ -230,8 +224,7 @@ sil_AML_k2_cl <- mean(silhouette(as.integer(clustersAML_k2_cl), dist(t(top_miRNA
 sil_AML_k3_cl <- mean(silhouette(as.integer(clustersAML_k3_cl), dist(t(top_miRNA)))[, 3])
 sil_AML_k4_cl <- mean(silhouette(as.integer(clustersAML_k4_cl), dist(t(top_miRNA)))[, 3])
 
-# Store silhouette score of the AML data before and after filtering in a data
-# frame
+# Store silhouette score of the AML data before and after filtering in a data frame
 sil_df <- data.frame(
   Dataset = c(
     rep("AML", 3),
@@ -265,8 +258,7 @@ top20_wk2 <- sort(diff_w, decreasing = TRUE)[1:20]
 # Store results in data frame for visualisation
 top20_miRNAs_wk2 <- data.frame(miRNA = names(top20_wk2), Difference = top20_wk2)
 
-# Visualise the top 20 miRNAs and their difference in contribution to the two
-# clusters
+# Visualise the top 20 miRNAs and their difference in contribution to the two clusters
 png("Top_miRNAs_k2.png")
 ggplot(top20_miRNAs_wk2, aes(
   x = reorder(miRNA, Difference), y = Difference, fill = Difference)) +
