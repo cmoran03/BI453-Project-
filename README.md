@@ -17,7 +17,6 @@ This project applies Non-Negative Matrix Factorisation to miRNA samples of leuke
 ## Load Packages
 
 ```{r}
-library(dplyr)
 library(NMF)
 library(mclust)
 library(matrixcalc)
@@ -75,7 +74,7 @@ colnames(covariates_ALL) <- ("Disease")
 
 ```{r}
 # Compare NMF for ranks k=2, k=3 and k=4 using the Brunet method
-kcompar <- nmf(A, rank = 2:4, method = "brunet", seed = "random", nrun = 50)
+kcompar <- nmf(A, rank = 2:4, method = "brunet", seed =123, nrun = 100)
 
 # Create consensus maps comparing each rank
 png("RankComparison_kl.png", width = 3000, height = 2400, res = 300)
@@ -84,13 +83,13 @@ dev.off()
 
 # Create lines graphs comparing Cophenetic Correlation coefficient and silhouette of each rank
 png("CopheneticCorrelation_Silhouette_RSS.png", width = 3000, height = 2400, res = 300)
-plot(kcompar, what = c("cophenetic","rss"))
+plot(kcompar, what = c("cophenetic","silouette"))
 dev.off()
 
 # Run NMF for each rank seperately
-res_k2 <- nmf(A, rank = 2, method = "brunet", seed = "random", nrun = 50)
-res_k3 <- nmf(A, rank = 3, method = "brunet", seed = "random", nrun = 50)
-res_k4 <- nmf(A, rank = 4, method = "brunet", seed = "random", nrun = 50)
+res_k2 <- nmf(A, rank = 2, method = "brunet", seed = 123, nrun = 100)
+res_k3 <- nmf(A, rank = 3, method = "brunet", seed = 123, nrun = 100)
+res_k4 <- nmf(A, rank = 4, method = "brunet", seed = 123, nrun = 100)
 
 # Create cluster assignments based on NMF
 clusters_k2<- predict(res_k2)
@@ -103,7 +102,7 @@ ari_k2 <- adjustedRandIndex(clusters_k2, covariates2$Disease)
 ari_k3 <- adjustedRandIndex(clusters_k3, covariates$Disease)
 
 # Run NMF for k=3 using the Lee method
-res_k3_lee <- nmf(A, rank = 3, method = "lee", seed = "random", nrun = 50)
+res_k3_lee <- nmf(A, rank = 3, method = "lee", seed = 123, nrun = 100)
 
 # Extract W and H matrices from NMF 
 w_k3_lee <- basis(res_k3_lee)
@@ -132,7 +131,7 @@ qqline(as.vector(residuals), col = "red", lwd = 2)
 ALL_data <- as.matrix(A[ ,(19:60)])
 
 # Compare NMF for ranks k=2, k=3 and k=4 for ALL data
-kcompar_ALL <- nmf(ALL_data, rank = 2:4, method = "brunet", seed = "random", nrun = 50)
+kcompar_ALL <- nmf(ALL_data, rank = 2:4, method = "brunet", seed = 123, nrun = 100)
 
 # Create consensus maps comparing each rank
 png("RankSelection_kl_ALL.png", width = 3000, height = 2400, res = 300)
@@ -140,7 +139,7 @@ consensusmap(kcompar_ALL, annCol =  covariates_ALL, labRow = NA, labCol = NA, tr
 dev.off()
 
 # Run NMF for best rank
-resALL_k2 <- nmf(ALL_data, rank = 2, method = "brunet", seed = "random", nrun = 50)
+resALL_k2 <- nmf(ALL_data, rank = 2, method = "brunet", seed = 123, nrun = 100)
 
 # Create cluster assignments based on NMF
 clustersALL_k2<- predict(resALL_k2)
@@ -154,7 +153,7 @@ ari_ALL_k2_kl <- adjustedRandIndex(clustersALL_k2, covariates_ALL$Disease)
 AML_data <- as.matrix(A[ ,(1:18)])
 
 # Compare NMF for ranks k=2, k=3 and k=4 for AML data
-kcompar_AML <- nmf(AML_data, rank = 2:4, method = "brunet", seed = "random", nrun = 50)
+kcompar_AML <- nmf(AML_data, rank = 2:4, method = "brunet", seed = 123, nrun = 100)
 
 # Create consensus maps comparing each rank
 png("RankSelection_kl_AML.png", width = 3000, height = 2400, res = 300)
@@ -163,13 +162,13 @@ dev.off()
 
 # Create lines graphs comparing Cophenetic Correlation coefficient and silhouette of each rank
 png("CopheneticCorrelation_Silhouette_RSS_AML.png", width = 3000, height = 2400, res = 300)
-plot(kcompar_AML, what = c("cophenetic", "rss"))
+plot(kcompar_AML, what = c("cophenetic", "silhouette"))
 dev.off()
 
 # Run NMF for each rank seperately
-resAML_k2 <- nmf(AML_data, rank = 2, method = "brunet", seed = "random", nrun = 50)
-resAML_k3 <- nmf(AML_data, rank = 3, method = "brunet", seed = "random", nrun = 50)
-resAML_k4 <- nmf(AML_data, rank = 4, method = "brunet", seed = "random", nrun = 50)
+resAML_k2 <- nmf(AML_data, rank = 2, method = "brunet", seed = 123, nrun = 100)
+resAML_k3 <- nmf(AML_data, rank = 3, method = "brunet", seed = "random", nrun = 100)
+resAML_k4 <- nmf(AML_data, rank = 4, method = "brunet", seed = "random", nrun = 100)
 
 # Create cluster assignments based on NMF
 clustersAML_k2 <- predict(resAML_k2)
@@ -210,9 +209,9 @@ diff_w <- abs(w_AML_k2_norm[, 1] - w_AML_k2_norm[, 2])
 top_miRNA <- AML_data[diff_w > 0.3, ]
 
 # Run NMF for the cleaned AML data
-AML_k2_cl <- nmf(top_miRNA, rank = 2, method = "brunet", seed = "random", nrun = 50)
-AML_k3_cl <- nmf(top_miRNA, rank = 3, method = "brunet", seed = "random", nrun = 50)
-AML_k4_cl <- nmf(top_miRNA, rank = 4, method = "brunet", seed = "random", nrun = 50)
+AML_k2_cl <- nmf(top_miRNA, rank = 2, method = "brunet", seed = 123, nrun = 100)
+AML_k3_cl <- nmf(top_miRNA, rank = 3, method = "brunet, seed = 123, nrun = 100)
+AML_k4_cl <- nmf(top_miRNA, rank = 4, method = "brunet", seed = 123, nrun = 100)
 
 # Create cluster assignments for cleaned AML data
 clustersAML_k2_cl <- predict(AML_k2_cl)
