@@ -210,7 +210,7 @@ top_miRNA <- AML_data[diff_w > 0.3, ]
 
 # Run NMF for the cleaned AML data
 AML_k2_cl <- nmf(top_miRNA, rank = 2, method = "brunet", seed = 123, nrun = 100)
-AML_k3_cl <- nmf(top_miRNA, rank = 3, method = "brunet, seed = 123, nrun = 100)
+AML_k3_cl <- nmf(top_miRNA, rank = 3, method = "brunet", seed = 123, nrun = 100)
 AML_k4_cl <- nmf(top_miRNA, rank = 4, method = "brunet", seed = 123, nrun = 100)
 
 # Create cluster assignments for cleaned AML data
